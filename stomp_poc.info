@@ -1,0 +1,5 @@
+name = Stomp POC
+description = This module will send messages to a stomp listener from PHP.
+package = Fedora Repository
+version = 6.x-0.1
+core = 6.x
