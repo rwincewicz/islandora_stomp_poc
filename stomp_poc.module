@@ -34,23 +34,15 @@ function stomp_poc_page(&$form_state) {
   $form['queue'] = array(
     '#type' => 'textfield',
     '#title' => t('The STOMP Queue'),
-    '#default_value' => 'fedora.contentmodel.demo:testCModel',
+    '#default_value' => 'islandora',
     '#required' => TRUE,
   );
 
-  $form['pid'] = array(
+  $form['method'] = array(
     '#type' => 'textfield',
-    '#title' => t('pid'),
-    '#default_value' => 'demo:22',
-    '#description' => 'Must exist',
-    '#required' => TRUE,
-  );
-
-
-  $form['dsid'] = array(
-    '#type' => 'textfield',
-    '#title' => t('dsid'),
-    '#default_value' => 'woot',
+    '#title' => t('method'),
+    '#default_value' => 'sample',
+    '#description' => 'the method that stomp will respond to.',
     '#required' => TRUE,
   );
 
@@ -77,8 +69,7 @@ function stomp_poc_page_submit(&$form, &$form_state) {
   $values = $form_state['values'];
 
   $headers = array();
-  $headers['pid'] = $values['pid'];
-  $headers['dsid'] = $values['dsid'];
+  $headers['method'] = $values['method'];
 
   require_once("Stomp.php");
 
@@ -88,8 +79,10 @@ function stomp_poc_page_submit(&$form, &$form_state) {
   // connect
   $con->connect();
 
+  $body = json_encode($values);
+
   // send a message to the queue
-  $con->send('/topic/' . $values['queue'], $values['body'], $headers);
+  $con->send('/topic/' . $values['queue'], $body, $headers);
   echo "Sent message with body 'test'\n";
 
   // disconnect
